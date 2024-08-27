@@ -22,7 +22,7 @@ services:
       retries: 5
 
   app:
-    image: cesarbgoncalves/infra-challenge
+    image: cesarbgoncalves/infra-challenge:1.0.0
     container_name: challenge
     restart: always
     environment:
