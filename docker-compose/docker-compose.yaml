@@ -16,7 +16,7 @@ services:
       - mysql-volume:/var/lib/mysql
       - ./init.sql:/db/init.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p ${MYSQL_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "$${MYSQL_USER}", "-p $${MYSQL_PASSWORD}"]
       interval: 30s
       timeout: 10s
       retries: 5
