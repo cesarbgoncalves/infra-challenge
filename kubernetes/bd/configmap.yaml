@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: APP_CONFIGS
+  namespace: infra-challenge
+  resourceVersion: "516"
+  uid: b4952dc3-d670-11e5-8cd0-68f728db1985
+data:
+  DB_HOST: mysql
+  DB_PORT: 3306

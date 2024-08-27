@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: infra-challenge
+  labels:
+    app: challenge-db
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: challenge-db
+  template:
+    metadata:
+      labels:
+        app: challenge-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0.37-debian
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name:  banco-dados
+              mountPath: /var/lib/mysql
+          resources:
+            requests:
+              memory: "1G"
+              cpu: "500m"
+            limits:
+              memory: "2G"
+              cpu: "1000m"
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: DB_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: DB_USERNAME
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: DB_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: ROOT_PASSWORD
+          ports:
+            - containerPort: 3306
+              name: mysql
+              protocol: TCP
+      volumes:
+        - name: banco-dados
+          persistentVolumeClaim:
+            claimName: banco-dados-pvc
