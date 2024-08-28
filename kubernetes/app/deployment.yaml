@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: infra-challenge
   labels:
     app: challenge-app
   name: app
+  namespace: infra-challenge
 spec:
   selector:
     matchLabels:
@@ -15,43 +15,43 @@ spec:
         app: challenge-app
     spec:
       containers:
-        - name: challenge
-          image: cesarbgoncalves/infra-challenge:1.0.0
-          imagePullPolicy: IfNotPresent
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "100m"
-            limits:
-              memory: "128Mi"
-              cpu: "250m"
-          env:
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: app-configs
-                  key: DB_HOST
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: app-configs
-                  key: DB_PORT
-            - name: DB_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: app-secrets
-                  key: DB_DATABASE
-            - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: app-secrets
-                  key: DB_USERNAME
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: app-secrets
-                  key: DB_PASSWORD
-          ports:
-            - containerPort: 8000
-              name: http-api
-              protocol: TCP
+      - env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: DB_HOST
+              name: app-configs
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: DB_PORT
+              name: app-configs
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: DB_DATABASE
+              name: app-secrets
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: DB_USERNAME
+              name: app-secrets
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: app-secrets
+        image: cesarbgoncalves/infra-challenge:1.0.0
+        imagePullPolicy: IfNotPresent
+        name: challenge
+        ports:
+        - containerPort: 8000
+          name: http-api
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 250m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
