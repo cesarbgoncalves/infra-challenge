@@ -4,14 +4,17 @@ FROM php:8.3-rc-alpine
 # Definindo candidato para análise via docker inspect
 LABEL candidato="Cesar Barbosa Goncalves"
 
-# Instalando as dependências do PHP para funcionar a aplicação e removendo arquivos de cache, para deixar a imagem o mais enxuta possível
-RUN apk add --update bash libzip-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libxml2-dev icu-dev mysql-dev curl-dev libmemcached-dev &&\
+# Instalando as dependências do PHP para rodar a aplicação
+RUN apk add --update bash libzip-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev &&\
+    libxml2-dev icu-dev mysql-dev curl-dev libmemcached-dev &&\
     apk add --update --virtual build-dependencies build-base gcc wget autoconf && \
     docker-php-ext-install gd && \
     docker-php-ext-install zip &&\
     docker-php-ext-install xml &&\
-    docker-php-ext-install mysqli pdo pdo_mysql &&\
-    apk del build-dependencies &&\
+    docker-php-ext-install mysqli pdo pdo_mysql
+
+# Removendo arquivos de cache, para deixar a imagem o mais enxuta possível
+RUN apk del build-dependencies &&\
     rm -rf /var/cache/apk/*
 
 # Baixando e instalando o composer
